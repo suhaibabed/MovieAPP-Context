@@ -22,7 +22,7 @@ export const useHomeFetch = () => {
       setLoading(true);
 
       const movies = await API.fetchMovies(searchTerm, page);
-
+      // console
       setState((prev) => ({
         ...movies,
         result:
@@ -36,10 +36,10 @@ export const useHomeFetch = () => {
   //inital and search
   useEffect(() => {
     setState(initalState);
-    fetchMovies(1,searchTerm);
+    fetchMovies(1, searchTerm);
   }, [searchTerm]);
 
-  return { state, loading, error, setSearchTerm,searchTerm };
+  return { state, loading, error, setSearchTerm, searchTerm };
 
   //if you want to disappear the hero image when search  just call searchTerm
 };
