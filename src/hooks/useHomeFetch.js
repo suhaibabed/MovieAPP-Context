@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import API from "../API";
 
 const initalState = {
-  pages: 0,
+  pages: 0, 
   results: [],
   total_pages: 0,
   total_results: 0,
@@ -15,6 +15,8 @@ export const useHomeFetch = () => {
   const [state, setState] = useState(initalState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+ const [isLoadingMore, setIsLoadingMore] = useState(false);
+
 
   const fetchMovies = async (page, searchTerm = "") => {
     try {
@@ -33,13 +35,20 @@ export const useHomeFetch = () => {
     }
     setLoading(false);
   };
-  //inital and search
-  useEffect(() => {
+  //search
+  useEffect(()=>{
     setState(initalState);
     fetchMovies(1, searchTerm);
-  }, [searchTerm]);
+  },[searchTerm]);
 
-  return { state, loading, error, setSearchTerm, searchTerm };
+  //Load More
+  useEffect(()=>{
+    if(!isLoadingMore) return;
+    fetchMovies(state.page +1, searchTerm);
+    setIsLoadingMore(false);
+  },[isLoadingMore, searchTerm, state.page])
+
+  return { state, loading, error, setSearchTerm, searchTerm, setIsLoadingMore};
 
   //if you want to disappear the hero image when search  just call searchTerm
 };

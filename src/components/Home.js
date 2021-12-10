@@ -6,6 +6,7 @@ import Grid from "./Grid";
 import Thumb from "./Thumb";
 import Spinner from "./Spinner";
 import SearchBar from "./SearchBar";
+import Button from "./Button"
 //Hook
 import { useHomeFetch } from "./../hooks/useHomeFetch";
 
@@ -14,15 +15,26 @@ import NoImage from "../images/no_image.jpg";
 
 const Home = () => {
   //and put this here searchTerm
-  const { state, loading, error, setSearchTerm, searchTerm} = useHomeFetch();
+  const { state, loading,
+    error,
+    setSearchTerm,
+    searchTerm,
+    setIsLoadingMore,
+    
+  } =
+    useHomeFetch();
+
+  
 
   console.log(state);
 
+  if (error) return <div>Somting wrong .....</div>
+
   return (
     <>
-     
-     {/*and make condition here by searchTerm && for hiden the hero photo */}
-      { !searchTerm && state.results[2] ? (
+
+      {/*and make condition here by searchTerm && for hiden the hero photo */}
+      {!searchTerm && state.results[2] ? (
         <HeroImage
           image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${state.results[2].backdrop_path}`}
           title={`${state.results[2].original_title}`}
@@ -44,7 +56,14 @@ const Home = () => {
           />
         ))}
       </Grid>
-      <Spinner />
+      {loading && <Spinner />}
+      {state.page < state.total_pages && !loading && (
+        <Button text='Load More' 
+
+        callback={()=>setIsLoadingMore(true)}
+        
+        />
+      )}
     </>
   );
 };
